@@ -1,0 +1,28 @@
+#!/bin/sh
+
+base_dir="/srv/buildbot/slave/chroots"
+
+[[ -z $base_dir ]] && { echo "Usage: $0 /path/to/chroot-base"; exit 1; }
+
+set -e
+set -u
+
+cd $base_dir
+
+echo "creating chroots for all architectures..."
+for arch in i686 x86_64 ; do
+  echo "processing architecture $arch"
+
+  if [ ! -d $arch ]; then
+    mkdir $arch
+    setarch "${arch}" mkarchroot \
+      -C pacman.${arch}.conf \
+      -M makepkg.${arch}.conf \
+      $arch/root \
+      base-devel
+
+    chmod go+rx $arch -R
+  fi
+
+done
+

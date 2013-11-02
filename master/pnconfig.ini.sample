@@ -1,0 +1,10 @@
+[irc]
+username=pnbuildbot
+password=apasswordyoushouldchange
+
+[slaves]
+example-slave=pass
+
+[users]
+user1=passwd1
+user2=passwd2

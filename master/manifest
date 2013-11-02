@@ -1,0 +1,37 @@
+#    This file is part of pnbuildbot.
+#
+#        pnbuildbot is free software: you can redistribute it and/or modify
+#        it under the terms of the GNU General Public License v3 as published by
+#        the Free Software Foundation.
+#
+#        vlbuildbot is distributed in the hope that it will be useful,
+#        but WITHOUT ANY WARRANTY; without even the implied warranty of
+#        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#        GNU General Public License for more details.
+#
+#        See http://www.gnu.org/licenses/ for complete licensing terms.
+#
+# This file is adopted from https://bitbucket.org/VLCore/vlbuildbot/src/aed2d12f365e06eaa77cbc3da8a899cff1097533/master/manifest?at=master
+#
+# This file contains a list of repository and package names.
+# Each repository/package name is a directory in the source tree.
+# The list is used to generate a list of Builders for buildbot
+# Comments are ignored.
+# ------------------------- BEGIN LISTING ----------------
+core/filesystem
+core/grub
+core/mkinitcpio
+core/mkinitcpio-btrfs
+
+extra/pacnasinstall
+
+community/ajenti
+community/coffee-script
+community/lessc
+community/python2-catcher
+community/python2-exconsole
+community/python2-gevent-socketio
+community/python2-gevent-websocket
+community/python2-passlib
+community/pytohn2-reconfigure
+community/yuicompressor

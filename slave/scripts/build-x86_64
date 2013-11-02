@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# This script takes the following parameters
+repo=$1
+pkgname=$2
+
+buildbot_base=/srv/buildbot/slave
+chroot_base=$buildbot_base/chroots
+
+arch=x86_64
+
+# do some preliminary checks
+[[ -z $repo ]]    && { echo "Usage: $0 repo pkgname"; exit 1; }
+[[ -z $pkgname ]] && { echo "Usage: $0 repo pkgname"; exit 1; }
+
+# unfortunately buildbot does not recognize current directory
+CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+"$CWD"/build $repo $pkgname $arch

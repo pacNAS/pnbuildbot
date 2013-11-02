@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# This script takes the following parameters
+repo=$1
+pkgname=$2
+arch=$3
+
+buildbot_base=/srv/buildbot/slave
+chroot_base=$buildbot_base/chroots
+
+# No need to change anything past this line
+
+# The following directory must exist on starting this script
+# the directory is usually created from the buildbot on
+# checking out the changes
+git_repo=/srv/buildbot/slave/git/pkgbuilds
+
+# do some preliminary checks
+[[ -z $arch ]]    && { echo "Usage: $0 repo pkgname arch"; exit 1; }
+[[ -z $repo ]]    && { echo "Usage: $0 repo pkgname arch"; exit 1; }
+[[ -z $pkgname ]] && { echo "Usage: $0 repo pkgname arch"; exit 1; }
+
+[[ ! -d "$git_repo" ]] && { echo "The git repository $git_repo does not exist, called this script correctly?"; exit 1; }
+[[ ! -d "$git_repo"/"$repo" ]] && { echo "$repo is not a valid repository"; exit 1; }
+[[ ! -d "$git_repo"/"$repo"/"$pkgname" ]] && { echo "$pkgname is not a valid pkgname"; exit 1; }
+[[ ! -f "$git_repo"/"$repo"/"$pkgname"/PKGBUILD ]] && { echo "$pkgname is not a valid pkgname (no PKGBUILD available)"; exit 1; }
+
+set -e
+set -u
+
+echo "Update Chroot $chroot_base/$arch"
+arch-nspawn "$chroot_base"/$arch/root pacman -Syu --noconfirm
+
+echo "cd to $git_repo/$repo/$pkgname"
+cd "$git_repo"/"$repo"/"$pkgname"
+ls -l
+
+#-- Source folder: specify a fixed directory where all sources will be placed
+export SRCDEST="$buildbot_base/sources"
+
+#-- Destination: specify a fixed directory where all packages will be placed
+export PKGDEST="$buildbot_base/staging"
+
+#-- Log files: specify a fixed directory where all log files will be placed
+#export LOGDEST="/var/log/mkpkgs"
+
+#-- Packager: name/email of the person or organization building packages
+export PACKAGER="buildbot <dev@pacnas.org>"
+
+echo "  Building $pkgname in $chroot_base/$arch"
+makechrootpkg -c -n -r "$chroot_base"/"$arch"

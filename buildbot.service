@@ -1,0 +1,12 @@
+[Unit]
+Description=Buildbot master
+
+[Service]
+User=buildmaster
+Type=forking
+WorkingDirectory=/srv/buildbot/master
+ExecStart=/usr/bin/buildbot start /srv/buildbot/master
+PIDFile=/srv/buildbot/master/twistd.pid
+
+[Install]
+WantedBy=multi-user.target

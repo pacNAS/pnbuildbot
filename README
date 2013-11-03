@@ -14,27 +14,58 @@ version see https://bitbucket.org/VLCore/vlbuildbot/overview.
 Preparing a new master (this should not be necessary)
 -----------------------------------------------------
 
+# Install the buildbot portion (pacman -S buildbot)
+# useradd -M buildmaster
+# usermod -L buildmaster
+# usermod -a -G tu buildmaster
 # create directory /srv/buildbot
+# chown buildmaster:tu /srv/buildbot
 # cd into this directory
-# sudo buildbot create-master master
-# sudo chown root:tu master -R
-# 
+# sudo su buildmaster
+# buildbot create-master master
+# exit
+# sudo chown buildmaster:tu master -R
+# copy pnbuildbot/master/* into /srv/buildbot/master
+# chown buildmaster:tu all new files
+# copy buildbot.service to /etc/systemd/system/
+# start buildbot.service: systemctl start buildbot.service
+# enable buildbot.service: systemctl enable buildbot.service
 
 Preparing a new slave.
 ---------------------
+
+# Contact the pacnas buildbot administrator (hint: dev@pacnas.org) to get your password and the port so,
+number the slave can connect to the master.
+
+# Install devtools
 # Install the slave portion of the buildbot with {{{ pacman -S buildbot-slave }}}
-# Create the slave where you want it (recommended path is /srv/buildbot.  See buildbot-slave --help )
-# Create directory slave in /srv/buildbot
-# buildbot create-slave --umask=0022 slave localhost:9989 example-slave pass (note, that the hostname, the name of the 
+
+# chmod g+w /srv/buildbot
+
+# useradd -M buildslave
+# usermod -L buildslave
+# usermod -a -G tu buildslave
+
+# this user needs sudo rights, add the following lines to your sudoers file:
+
+## Allow buildslave to execute certain needed commands without password
+Cmnd_Alias  BUILD = /usr/bin/setarch, /usr/bin/mkarchroot, /usr/bin/arch-nspawn, /usr/bin/makechrootpkg
+buildslave ALL=NOPASSWD: BUILD
+
+# sudo su buildslave
+
+# Create the slave in /srv/buildbot using:
+# buildslave create-slave --umask=0022 slave localhost:9989 example-slave pass (note, that the hostname, the name of the
   slave and the password should be adopted accordingly)
+# chown buildslave:tu /srv/buildbot/slave -R
+# Edit the files admin and host in the sub-directory info
+
 # copy files from the slave-dir (github) to the newly created slave
 # chown root:tu staging sources
 # chmod 775 staging sources
 # ln -s preferred push command (e.g. collect_and_deploy_remote or collect_and_deploy_local (used on our server) to collect_and_deploy)
 
-# Edit the files admin and host in the sub-directory info
 
-# Contact the pacnas buildbot administrator (hint: dev@pacnas.org) to get your password so the slave can connect to the master.
 
 
 Getting the bot to work

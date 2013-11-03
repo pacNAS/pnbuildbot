@@ -1,0 +1,12 @@
+[Unit]
+Description=Buildslave
+
+[Service]
+User=buildslave
+Type=forking
+WorkingDirectory=/srv/buildbot/slave
+ExecStart=/usr/bin/buildslave start /srv/buildbot/slave
+PIDFile=/srv/buildbot/slave/twistd.pid
+
+[Install]
+WantedBy=multi-user.target

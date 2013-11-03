@@ -29,7 +29,7 @@ set -e
 set -u
 
 echo "Update Chroot $chroot_base/$arch"
-arch-nspawn "$chroot_base"/$arch/root pacman -Syu --noconfirm
+sudo arch-nspawn "$chroot_base"/$arch/root pacman -Syu --noconfirm
 
 echo "cd to $git_repo/$repo/$pkgname"
 cd "$git_repo"/"$repo"/"$pkgname"
@@ -48,4 +48,4 @@ export PKGDEST="$buildbot_base/staging"
 export PACKAGER="buildbot <dev@pacnas.org>"
 
 echo "  Building $pkgname in $chroot_base/$arch"
-makechrootpkg -c -n -r "$chroot_base"/"$arch"
+sudo makechrootpkg -c -n -r "$chroot_base"/"$arch"

@@ -45,4 +45,4 @@ export PKGDEST="$buildbot_base/staging"
 export PACKAGER="buildbot <dev@pacnas.org>"
 
 echo "  Building $pkgname in $chroot_base/$arch"
-makechrootpkg -c -n -r "$chroot_base"/"$arch" -- --allsource
+sudo makechrootpkg -c -n -r "$chroot_base"/"$arch" -- --allsource

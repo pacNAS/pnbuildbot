@@ -15,13 +15,12 @@ for arch in i686 x86_64 ; do
 
   if [ ! -d $arch ]; then
     mkdir $arch
-    setarch "${arch}" mkarchroot \
+    sudo setarch "${arch}" mkarchroot \
       -C pacman.${arch}.conf \
       -M makepkg.${arch}.conf \
       $arch/root \
       base-devel
 
-    chmod go+rx $arch -R
   fi
 
 done

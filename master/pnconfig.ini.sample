@@ -1,6 +1,10 @@
+[net]
+slave-port=9989
+status-port=8010
+
 [irc]
 username=pnbuildbot
-password=apasswordyoushouldchange
+password=changethispassword
 
 [slaves]
 example-slave=pass

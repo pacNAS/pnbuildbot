@@ -97,13 +97,14 @@ class AppBuilder(object):
 
 			# add the steps to the factory
 			for step in (step_srcpull, step_setup_chroots, step_build_i686, step_build_x86_64,
-				step_build_sources, step_push, step_cleanup):
+				step_build_source, step_push, step_cleanup):
 				factory.addStep(step)
 
 			builder = BuilderConfig(
 					name = entry.name,
+					category = repo,
 					slavenames = [ i.slavename for i in slaves ],
-					properties = {"pkgname": name },
+					properties = { "pkgname": name },
 					factory = factory,
 					builddir = "builders/%s" % entry.name
 					)

@@ -10,5 +10,4 @@ arch=i686
 [[ -z $repo ]]    && { echo "Usage: $0 repo pkgname"; exit 1; }
 [[ -z $pkgname ]] && { echo "Usage: $0 repo pkgname"; exit 1; }
 
-# unfortunately buildbot does not recognize current directory
-./build $repo $pkgname $arch
+scripts/build $repo $pkgname $arch

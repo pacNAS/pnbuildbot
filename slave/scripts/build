@@ -5,15 +5,17 @@ repo=$1
 pkgname=$2
 arch=$3
 
-buildbot_base=/srv/buildbot/slave
-chroot_base=$buildbot_base/chroots
+opts=$4
+
+chroot_base=../chroots
+pkg_base=../builders/$repo/$pkgname/
 
 # No need to change anything past this line
 
 # The following directory must exist on starting this script
 # the directory is usually created from the buildbot on
 # checking out the changes
-git_repo=/srv/buildbot/slave/git/pkgbuilds
+git_repo=../git/pkgbuilds
 
 # do some preliminary checks
 [[ -z $arch ]]    && { echo "Usage: $0 repo pkgname arch"; exit 1; }
@@ -36,13 +38,13 @@ cd "$git_repo"/"$repo"/"$pkgname"
 ls -l
 
 #-- Source folder: specify a fixed directory where all sources will be placed
-export SRCDEST="$buildbot_base/sources"
+export SRCDEST="$pkg_base/sources"
 
 #-- Source packages: specify a fixed directory where all src packages will be placed
-export SRCPKGDEST="$buildbot_base/srcpackages"
+export SRCPKGDEST="$pkg_base/srcpackages"
 
 #-- Destination: specify a fixed directory where all packages will be placed
-export PKGDEST="$buildbot_base/staging"
+export PKGDEST="$pkg_base/staging"
 
 #-- Log files: specify a fixed directory where all log files will be placed
 #export LOGDEST="/var/log/mkpkgs"
@@ -51,4 +53,8 @@ export PKGDEST="$buildbot_base/staging"
 export PACKAGER="buildbot <dev@pacnas.org>"
 
 echo "  Building $pkgname in $chroot_base/$arch"
-sudo makechrootpkg -c -n -r "$chroot_base"/"$arch"
+if [[ ! -z $opts ]]; then
+  sudo makechrootpkg -c -n -r "$chroot_base"/"$arch"
+else
+  sudo makechrootpkg -c -n -r "$chroot_base"/"$arch" -- $opts
+fi

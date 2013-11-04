@@ -36,8 +36,7 @@ class AppBuilder(object):
 	def all(cls, fpath, slaves):
 		"""Takes an argument (fpath) which should be the path to the manifest file"""
 
-		base_dir = "../../../../"
-		script_dir = base_dir + "scripts/"
+		base_dir = "../../../"
 
 		for entry in manifest.Manifest.all(fpath):
 			split = entry.name.split('/')
@@ -51,9 +50,10 @@ class AppBuilder(object):
 					workdir= base_dir + "git/pkgbuilds")
 
 			step_setup_chroots = ShellCommand(
-					command = [script_dir + "chroot-maker",
+					command = ["scripts/chroot-maker",
 						WithProperties('%(branch)s')
 						],
+					workdir=base_dir,
 					haltOnFailure = True,
 					flunkOnFailure = True,
 					description = "setup chroots",
@@ -61,27 +61,30 @@ class AppBuilder(object):
 					interruptSignal="TERM")
 
 			step_build_i686 = ShellCommand(
-					command = [script_dir + "build-i686", repo, name,
+					command = ["scripts/build-i686", repo, name,
 						WithProperties('%(branch)s')
 						],
+					workdir=base_dir,
 					haltOnFailure = True,
 					flunkOnFailure = True,
 					description = "build i686",
 					descriptionDone = "builded i686", name = "build_i686",
 					interruptSignal="TERM")
 			step_build_x86_64 = ShellCommand(
-					command = [script_dir + "build-x86_64", repo, name,
+					command = ["scripts/build-x86_64", repo, name,
 						WithProperties('%(branch)s')
 						],
+					workdir=base_dir,
 					haltOnFailure = True,
 					flunkOnFailure = True,
 					description = "build x86_64",
 					descriptionDone = "builded x86_64", name = "build_x86_64",
 					interruptSignal="TERM")
 			step_build_source = ShellCommand(
-					command = [script_dir + "generate-source", repo, name,
+					command = ["scripts/build", repo, name, "i686", "--allsource",
 						WithProperties('%(branch)s')
 						],
+					workdir=base_dir,
 					haltOnFailure = True,
 					flunkOnFailure = True,
 					description = "build sources",

@@ -4,10 +4,6 @@
 repo=$1
 pkgname=$2
 
-buildbot_base=/srv/buildbot/slave
-script_dir=$buildbot_base/scripts
-chroot_base=$buildbot_base/chroots
-
 arch=i686
 
 # do some preliminary checks
@@ -15,4 +11,4 @@ arch=i686
 [[ -z $pkgname ]] && { echo "Usage: $0 repo pkgname"; exit 1; }
 
 # unfortunately buildbot does not recognize current directory
-"$script_dir"/build $repo $pkgname $arch
+./build $repo $pkgname $arch

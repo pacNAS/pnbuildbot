@@ -46,11 +46,7 @@ number the slave can connect to the master.
 # usermod -L buildslave
 # usermod -a -G tu buildslave
 
-# this user needs sudo rights, add the following lines to your sudoers file:
-
-## Allow buildslave to execute certain needed commands without password
-Cmnd_Alias  BUILD = /usr/bin/setarch, /usr/bin/mkarchroot, /usr/bin/arch-nspawn, /usr/bin/makechrootpkg
-buildslave ALL=NOPASSWD: BUILD
+# this user needs sudo rights, add the file buildslave.sudoers to your /etc/sudoers.d (chmod 440)
 
 # sudo su buildslave
 
@@ -61,10 +57,8 @@ buildslave ALL=NOPASSWD: BUILD
 # Edit the files admin and host in the sub-directory info
 
 # copy files from the slave-dir (github) to the newly created slave
-# chown root:tu staging sources
+# chown buildslave staging sources
 # chmod 775 staging sources
-# ln -s preferred push command (e.g. collect_and_deploy_remote or collect_and_deploy_local (used on our server) to collect_and_deploy)
-
 
 
 

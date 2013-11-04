@@ -35,6 +35,9 @@ ls -l
 #-- Source folder: specify a fixed directory where all sources will be placed
 export SRCDEST="$buildbot_base/sources"
 
+#-- Source packages: specify a fixed directory where all src packages will be placed
+export SRCPKGDEST="$buildbot_base/srcpackages"
+
 #-- Destination: specify a fixed directory where all packages will be placed
 export PKGDEST="$buildbot_base/staging"
 
@@ -46,3 +49,4 @@ export PACKAGER="buildbot <dev@pacnas.org>"
 
 echo "  Building $pkgname in $chroot_base/$arch"
 sudo makechrootpkg -c -n -r "$chroot_base"/"$arch" -- --allsource
+

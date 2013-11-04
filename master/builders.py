@@ -35,17 +35,23 @@ class AppBuilder(object):
 	@classmethod
 	def all(cls, fpath, slaves):
 		"""Takes an argument (fpath) which should be the path to the manifest file"""
+
+		base_dir = "../../../../"
+		script_dir = base_dir + "scripts/"
+
 		for entry in manifest.Manifest.all(fpath):
 			split = entry.name.split('/')
 			repo = split[0]
 			name = split[1]
 
 			factory = BuildFactory()
+
 			step_srcpull = Git(repourl="http://github.com/pacNAS/pkgbuilds.git", mode='full',
 					method = 'clobber', submodules=True, branch="master",
-					workdir="/srv/buildbot/slave/git/pkgbuilds")
+					workdir= base_dir + "git/pkgbuilds")
+
 			step_setup_chroots = ShellCommand(
-					command = ["/srv/buildbot/slave/scripts/chroot-maker",
+					command = [script_dir + "chroot-maker",
 						WithProperties('%(branch)s')
 						],
 					haltOnFailure = True,
@@ -53,8 +59,9 @@ class AppBuilder(object):
 					description = "setup chroots",
 					descriptionDone = "setup chroots", name = "setup chroots",
 					interruptSignal="TERM")
+
 			step_build_i686 = ShellCommand(
-					command = ["/srv/buildbot/slave/scripts/build-i686", repo, name,
+					command = [script_dir + "build-i686", repo, name,
 						WithProperties('%(branch)s')
 						],
 					haltOnFailure = True,
@@ -63,7 +70,7 @@ class AppBuilder(object):
 					descriptionDone = "builded i686", name = "build_i686",
 					interruptSignal="TERM")
 			step_build_x86_64 = ShellCommand(
-					command = ["/srv/buildbot/slave/scripts/build-x86_64", repo, name,
+					command = [script_dir + "build-x86_64", repo, name,
 						WithProperties('%(branch)s')
 						],
 					haltOnFailure = True,
@@ -71,8 +78,8 @@ class AppBuilder(object):
 					description = "build x86_64",
 					descriptionDone = "builded x86_64", name = "build_x86_64",
 					interruptSignal="TERM")
-			step_build_sources = ShellCommand(
-					command = ["/srv/buildbot/slave/scripts/generate-source", repo, name,
+			step_build_source = ShellCommand(
+					command = [script_dir + "generate-source", repo, name,
 						WithProperties('%(branch)s')
 						],
 					haltOnFailure = True,
@@ -81,14 +88,15 @@ class AppBuilder(object):
 					descriptionDone = "builded sources", name = "build_sources",
 					interruptSignal="TERM")
 
-			step_push = FileUpload(slavesrc="/srv/buildbot/slave/staging/*.pkg.tar.xz",
-					masterdest="/srv/buildbot/master/staging",
+			step_push = FileUpload(slavesrc="../../../staging/*.pkg.tar.xz",
+					masterdest="staging/dummy_file.pkg.tar.xz",
 					name = "push")
 
 			step_cleanup = ShellCommand(
-					command = ["rm /srv/buildbot/slave/staging/*.pkg.tar.xz",
+					command = ["rm *.pkg.tar.xz",
 						WithProperties('%(branch)s')
 						],
+					workdir=base_dir + "staging",
 					haltOnFailure = True,
 					flunkOnFailure = True,
 					description = "cleanup",

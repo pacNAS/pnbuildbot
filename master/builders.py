@@ -21,7 +21,7 @@ Generates Builder objects for use with master.cfg based on
 the text file named 'manifest'
 """
 from buildbot.steps.shell import ShellCommand
-from buildbot.steps.transfer import FileUpload
+from buildbot.steps.transfer import DirectoryUpload
 from buildbot.process.properties import WithProperties
 from buildbot.process.factory import BuildFactory
 from buildbot.config import BuilderConfig
@@ -91,15 +91,16 @@ class AppBuilder(object):
 					descriptionDone = "builded sources", name = "build_sources",
 					interruptSignal="TERM")
 
-			step_push = FileUpload(slavesrc="../../../staging/*.pkg.tar.xz",
-					masterdest="staging/dummy_file.pkg.tar.xz",
+			step_push = DirectoryUpload(
+					slavesrc=".",
+					masterdest="staging",
 					name = "push")
 
 			step_cleanup = ShellCommand(
-					command = ["rm *.pkg.tar.xz",
+					command = ['rm', '*', '-rf',
 						WithProperties('%(branch)s')
 						],
-					workdir=base_dir + "staging",
+#					workdir=base_dir,
 					haltOnFailure = True,
 					flunkOnFailure = True,
 					description = "cleanup",

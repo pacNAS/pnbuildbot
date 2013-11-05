@@ -46,7 +46,7 @@ ls -l
 echo "Setting all destinations to $pkg_base"
 
 #-- Source folder: specify a fixed directory where all sources will be placed
-export SRCDEST="$pkg_base"
+export SRCDEST="$SCRIPTPATH/../sources"
 
 #-- Source packages: specify a fixed directory where all src packages will be placed
 export SRCPKGDEST="$pkg_base"
@@ -60,9 +60,5 @@ export PKGDEST="$pkg_base"
 #-- Packager: name/email of the person or organization building packages
 export PACKAGER="buildbot <dev@pacnas.org>"
 
-echo "  Building $pkgname in $chroot_base/$arch"
-if [[ ! -z $opts ]]; then
-  sudo makechrootpkg -c -n -r "$chroot_base"/"$arch"
-else
-  sudo makechrootpkg -c -n -r "$chroot_base"/"$arch" -- $opts
-fi
+echo "  Building $pkgname in $chroot_base/$arch with $opts"
+sudo makechrootpkg -c -n -r "$chroot_base"/"$arch" -- $opts

@@ -27,6 +27,7 @@ Preparing a new master (this should not be necessary)
 # sudo chown buildmaster:tu master -R
 # copy pnbuildbot/master/* into /srv/buildbot/master
 # chown buildmaster:tu all new files
+# copy pnconfig.ini.sample to pnconfig.ini and adopt to your own needs
 # copy buildbot.service to /etc/systemd/system/
 # start buildbot.service: systemctl start buildbot.service
 # enable buildbot.service: systemctl enable buildbot.service
@@ -61,22 +62,23 @@ number the slave can connect to the master.
 # chmod 775 staging sources
 
 
-
 Getting the bot to work
 -----------------------
 Since this repo only holds the configuration, we need to actually install and setup the bot, and then drop in our configuration.  The following links provide the guide to installing the master and slaves with the default setup.
  * http://buildbot.net/buildbot/docs/current/tutorial/
  * http://buildbot.net/buildbot/docs/current/manual/installation.html
-Once the master is installed, you can delete (or rename) the directory named 'master' and use the one on this repo to replace it.  The global bot configuration file is master/master.cfg
+Once the master is installed, you should follow the above mentioned steps
 
 Adding a new slave
 ------------------
-To add a new slave to the master, you must create the slave, and then edit slaves.py on the master configuration to add the new slave to the allowed slaves list.
+To add a new slave to the master, you must create the slave, and then edit the pnconfig.ini in the master directory. The section
+[slaves] contains the values for each slave (name, password) separated by an '='.
 
 Adding a new application to the bot
 -----------------------------------
 The bot monitors the provided versioned repository in master.cfg and/or builders.py.  However, to add a new application to be tracked and built by the bot, the application name needs to be added to the file named 'manifest' in the master configuration directory.
 
-See http://vlcore.vectorlinux.com/buildbot/docs
+For further documentation you can take a look on the original documentation of the vl-bot or write an email to dev@pacnas.org.
 
+See http://vlcore.vectorlinux.com/buildbot/docs
 

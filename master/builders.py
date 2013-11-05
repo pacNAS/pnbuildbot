@@ -100,7 +100,6 @@ class AppBuilder(object):
 					command = ['rm', '*', '-rf',
 						WithProperties('%(branch)s')
 						],
-#					workdir=base_dir,
 					haltOnFailure = True,
 					flunkOnFailure = True,
 					description = "cleanup",

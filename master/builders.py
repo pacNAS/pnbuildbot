@@ -21,6 +21,7 @@ Generates Builder objects for use with master.cfg based on
 the text file named 'manifest'
 """
 from buildbot.steps.shell import ShellCommand
+from buildbot.steps.master import MasterShellCommand
 from buildbot.steps.transfer import DirectoryUpload
 from buildbot.process.properties import WithProperties
 from buildbot.process.factory import BuildFactory
@@ -93,8 +94,10 @@ class AppBuilder(object):
 
 			step_push = DirectoryUpload(
 					slavesrc=".",
-					masterdest="staging",
+					masterdest=os.path.join("staging", repo),
 					name = "push")
+
+			step_deploy_in_repo = MasterShellCommand(command="deploy")
 
 			step_cleanup = ShellCommand(
 					command = ['rm', '*', '-rf',

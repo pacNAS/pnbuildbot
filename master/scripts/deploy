@@ -1,0 +1,37 @@
+#!/bin/sh
+
+repo=$1
+
+src_base=/srv/buildbot/master/staging
+current_src_dir=$src_base/"$repo"
+
+repo_base=/srv/http/pacnas
+current_repo_dir=$repo_base/"$repo"/os
+
+# src is not strictly an arch, but...
+archs=(any i686 x86_64 src)
+
+for arch in "${archs[@]}"
+do
+  for f in $current_src_dir/*${arch}*
+  do
+    if [ -f $f ]
+    then
+      echo "${arch}: $f"
+
+      cp $f $current_repo_dir/${arch}/
+
+      if [ "${arch}" == "any" ]
+      then
+        ln -s $current_repo_dir/any/$(basename $f) $current_repo_dir/i686/$(basename $f)
+        ln -s $current_repo_dir/any/$(basename $f) $current_repo_dir/x86_64/$(basename $f)
+
+        repo-add $current_repo_dir/i686/${repo}.db.tar.gz $current_repo_dir/i686/$(basename $f)
+        repo-add $current_repo_dir/x86_64/${repo}.db.tar.gz $current_repo_dir/x86_64/$(basename $f)
+      elif [ "${arch}" != "src" ]
+      then
+        repo-add $current_repo_dir/${arch}/${repo}.db.tar.gz $current_repo_dir/${arch}/$(basename $f)
+      fi
+    fi
+  done
+done

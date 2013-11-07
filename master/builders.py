@@ -97,7 +97,7 @@ class AppBuilder(object):
 					masterdest=os.path.join("staging", repo),
 					name = "push")
 
-			step_deploy_in_repo = MasterShellCommand(command="deploy")
+			step_deploy_in_repo = MasterShellCommand(command= ['scripts/deploy', repo])
 
 			step_cleanup = ShellCommand(
 					command = ['rm', '*', '-rf',
@@ -111,7 +111,7 @@ class AppBuilder(object):
 
 			# add the steps to the factory
 			for step in (step_srcpull, step_setup_chroots, step_build_i686, step_build_x86_64,
-				step_build_source, step_push, step_cleanup):
+				step_build_source, step_push, step_deploy_in_repo, step_cleanup):
 				factory.addStep(step)
 
 			builder = BuilderConfig(

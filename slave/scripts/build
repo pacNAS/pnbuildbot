@@ -5,15 +5,23 @@ repo=$1
 pkgname=$2
 arch=$3
 
-buildbot_base=/srv/buildbot/slave
-chroot_base=$buildbot_base/chroots
+opts=$4
+
+# Absolute path to this script. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f $0)
+# Absolute path this script is in. /home/user/bin
+SCRIPTPATH=`dirname $SCRIPT`
+
+chroot_base=$SCRIPTPATH/../chroots
+
+pkg_base=$SCRIPTPATH/../builders/$repo/$pkgname/build
 
 # No need to change anything past this line
 
 # The following directory must exist on starting this script
 # the directory is usually created from the buildbot on
 # checking out the changes
-git_repo=/srv/buildbot/slave/git/pkgbuilds
+git_repo=git/pkgbuilds
 
 # do some preliminary checks
 [[ -z $arch ]]    && { echo "Usage: $0 repo pkgname arch"; exit 1; }
@@ -35,14 +43,16 @@ echo "cd to $git_repo/$repo/$pkgname"
 cd "$git_repo"/"$repo"/"$pkgname"
 ls -l
 
+echo "Setting all destinations to $pkg_base"
+
 #-- Source folder: specify a fixed directory where all sources will be placed
-export SRCDEST="$buildbot_base/sources"
+export SRCDEST="$SCRIPTPATH/../sources"
 
 #-- Source packages: specify a fixed directory where all src packages will be placed
-export SRCPKGDEST="$buildbot_base/srcpackages"
+export SRCPKGDEST="$pkg_base"
 
 #-- Destination: specify a fixed directory where all packages will be placed
-export PKGDEST="$buildbot_base/staging"
+export PKGDEST="$pkg_base"
 
 #-- Log files: specify a fixed directory where all log files will be placed
 #export LOGDEST="/var/log/mkpkgs"
@@ -50,5 +60,5 @@ export PKGDEST="$buildbot_base/staging"
 #-- Packager: name/email of the person or organization building packages
 export PACKAGER="buildbot <dev@pacnas.org>"
 
-echo "  Building $pkgname in $chroot_base/$arch"
-sudo makechrootpkg -c -n -r "$chroot_base"/"$arch"
+echo "  Building $pkgname in $chroot_base/$arch with $opts"
+sudo makechrootpkg -c -n -r "$chroot_base"/"$arch" -- $opts

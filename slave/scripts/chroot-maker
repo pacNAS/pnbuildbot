@@ -1,6 +1,6 @@
 #!/bin/sh
 
-base_dir="/srv/buildbot/slave/chroots"
+base_dir="chroots"
 
 [[ -z $base_dir ]] && { echo "Usage: $0 /path/to/chroot-base"; exit 1; }
 

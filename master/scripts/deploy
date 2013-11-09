@@ -19,11 +19,20 @@ do
     then
       echo "${arch}: $f"
 
+      # make sure, that we are always using the latest version
+      # could be unnecessary...
+      if [ -f $current_repo_dir/${arch}/$(basename $f) ]
+      then
+        rm $current_repo_dir/${arch}/$(basename $f)
+      fi
       cp $f $current_repo_dir/${arch}/
 
       if [ "${arch}" == "any" ]
       then
+        rm $current_repo_dir/i686/$(basename $f)
         ln -s $current_repo_dir/any/$(basename $f) $current_repo_dir/i686/$(basename $f)
+
+        rm $current_repo_dir/x86_64/$(basename $f)
         ln -s $current_repo_dir/any/$(basename $f) $current_repo_dir/x86_64/$(basename $f)
 
         repo-add $current_repo_dir/i686/${repo}.db.tar.gz $current_repo_dir/i686/$(basename $f)

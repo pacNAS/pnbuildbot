@@ -93,7 +93,7 @@ class AppBuilder(object):
 					interruptSignal="TERM")
 
 			step_push = DirectoryUpload(
-					slavesrc=".",
+					slavesrc="../.",
 					masterdest=os.path.join("staging", repo),
 					name = "push")
 
@@ -120,7 +120,8 @@ class AppBuilder(object):
 					slavenames = [ i.slavename for i in slaves ],
 					properties = { "pkgname": name },
 					factory = factory,
-					builddir = "builders/%s" % entry.name
+					builddir = "builders/%s" % entry.name,
+					slavebuilddir = "builders/%s" % entry.name,
 					)
 
 			yield builder

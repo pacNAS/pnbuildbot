@@ -44,6 +44,7 @@ cd "$git_repo"/"$repo"/"$pkgname"
 ls -l
 
 echo "Setting all destinations to $pkg_base"
+mkdir -p $pkg_base
 
 #-- Source folder: specify a fixed directory where all sources will be placed
 export SRCDEST="$SCRIPTPATH/../sources"

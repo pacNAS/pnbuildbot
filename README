@@ -18,9 +18,9 @@ Preparing a new master (this should not be necessary)
 # useradd -M buildmaster
 # usermod -L buildmaster
 # usermod -a -G tu buildmaster
-# create directory /srv/buildbot
-# chown buildmaster:tu /srv/buildbot
-# cd into this directory
+# create directory /srv/buildbot/master
+# chown buildmaster:tu /srv/buildbot/master
+# cd into /srv/buildbot
 # sudo su buildmaster
 # buildbot create-master master
 # exit
@@ -31,6 +31,28 @@ Preparing a new master (this should not be necessary)
 # copy buildbot.service to /etc/systemd/system/
 # start buildbot.service: systemctl start buildbot.service
 # enable buildbot.service: systemctl enable buildbot.service
+
+If you are using buildbot behind a reverse proxy (apache2 with mod_proxy) and you do
+have slashes in your builder-names (we do use them to separate repositories from the
+package name, eg. community/lessc), the following http-config is needed:
+
+#
+# Configure buildbot to use usual port 80 and forward (via mod_proxy) to port 8010
+#
+
+<Location "/buildbot">
+    Satisfy any
+    Allow from all
+</Location>
+
+# we need %2F as the encoding of / for the names of builders (eg. community/lessc)
+# see http://serverfault.com/questions/455060/cant-get-mod-proxy-to-correctly-forward-encoded-slash-characters-2f
+AllowEncodedSlashes On
+
+ProxyPass /buildbot/ http://localhost:8010/ nocanon
+ProxyPassReverse /buildbot/ http://localhost:8010/
+
+
 
 Preparing a new slave.
 ---------------------
@@ -56,6 +78,8 @@ number the slave can connect to the master.
   slave and the password should be adopted accordingly)
 # chown buildslave:tu /srv/buildbot/slave -R
 # Edit the files admin and host in the sub-directory info
+
+# copy buildslave.sudoers /etc/sudoers.d/buildslave
 
 # copy files from the slave-dir (github) to the newly created slave
 # chown buildslave staging sources

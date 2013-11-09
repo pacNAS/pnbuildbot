@@ -5,4 +5,4 @@ Defaults env_keep +="LOGDEST"
 Defaults env_keep +="PACKAGER"
 
 Cmnd_Alias BUILD = /usr/bin/setarch, /usr/bin/mkarchroot, /usr/bin/arch-nspawn, /usr/bin/makechrootpkg
-buildslave ALL=NOPASSWD: BUILD
+buildslave ALL=(root)NOPASSWD: BUILD

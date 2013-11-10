@@ -93,7 +93,7 @@ class AppBuilder(object):
 					interruptSignal="TERM")
 
 			step_push = DirectoryUpload(
-					slavesrc="../.",
+					slavesrc=".",
 					masterdest=os.path.join("staging", repo),
 					name = "push")
 

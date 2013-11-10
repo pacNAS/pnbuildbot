@@ -18,20 +18,14 @@
 # The list is used to generate a list of Builders for buildbot
 # Comments are ignored.
 # ------------------------- BEGIN LISTING ----------------
-core/filesystem
-core/grub
-core/mkinitcpio
-core/mkinitcpio-btrfs
+pn-core/filesystem
+pn-core/grub
+pn-core/mkinitcpio
+pn-core/mkinitcpio-btrfs
+pn-core/pacman-mirrorlist
 
-extra/pacnasinstall
+pn-extra/pacnasinstall
 
-community/ajenti
-community/coffee-script
-community/lessc
-community/python2-catcher
-community/python2-exconsole
-community/python2-gevent-socketio
-community/python2-gevent-websocket
-community/python2-passlib
-community/pytohn2-reconfigure
-community/yuicompressor
+pn-community/python2-ntplib
+pn-community/python2-iptables
+pn-community/genesis

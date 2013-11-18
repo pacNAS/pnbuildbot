@@ -22,6 +22,7 @@ pn-core/filesystem
 pn-core/grub
 pn-core/mkinitcpio
 pn-core/mkinitcpio-btrfs
+pn-core/pacman
 pn-core/pacman-mirrorlist
 
 pn-extra/pacnasinstall

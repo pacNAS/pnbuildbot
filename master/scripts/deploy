@@ -8,6 +8,9 @@ current_src_dir=$src_base/"$repo"
 repo_base=/srv/http/pacnas
 current_repo_dir=$repo_base/"$repo"/os
 
+pool_dir=$repo_base/pool/packages
+pool_src_dir=$repo_base/sources/packages
+
 # src is not strictly an arch, but...
 archs=(any i686 x86_64 src)
 
@@ -19,28 +22,34 @@ do
     then
       echo "${arch}: $f"
 
-      # make sure, that we are always using the latest version
-      # could be unnecessary...
-      if [ -f $current_repo_dir/${arch}/$(basename $f) ]
+      if [ "$arch" == "src" ]
       then
-        rm $current_repo_dir/${arch}/$(basename $f)
+        cp $f $pool_src_dir
+        sudo chown root:tu $pool_src_dir/$(basename $f)
+        sudo chmod 664 $pool_src_dir/$(basename $f)
+      else
+        cp $f $pool_dir
+        sudo chown root:tu $pool_dir/$(basename $f)
+        sudo chmod 664 $pool_dir/$(basename $f)
+
+        if [ "${arch}" == "any" ]
+        then
+          rm $current_repo_dir/i686/$(basename $f)
+          ln -s $pool_dir/$(basename $f) $current_repo_dir/i686/$(basename $f)
+
+          rm $current_repo_dir/x86_64/$(basename $f)
+          ln -s $pool_dir/$(basename $f) $current_repo_dir/x86_64/$(basename $f)
+
+          repo-add $current_repo_dir/i686/${repo}.db.tar.gz $current_repo_dir/i686/$(basename $f)
+          repo-add $current_repo_dir/x86_64/${repo}.db.tar.gz $current_repo_dir/x86_64/$(basename $f)
+        else
+          rm $current_repo_dir/${arch}/$(basename $f)
+          ln -s $pool_dir/$(basename $f) $current_repo_dir/${arch}/$(basename $f)
+
+          repo-add $current_repo_dir/${arch}/${repo}.db.tar.gz $current_repo_dir/${arch}/$(basename $f)
+        fi
       fi
-      cp $f $current_repo_dir/${arch}/
 
-      if [ "${arch}" == "any" ]
-      then
-        rm $current_repo_dir/i686/$(basename $f)
-        ln -s $current_repo_dir/any/$(basename $f) $current_repo_dir/i686/$(basename $f)
-
-        rm $current_repo_dir/x86_64/$(basename $f)
-        ln -s $current_repo_dir/any/$(basename $f) $current_repo_dir/x86_64/$(basename $f)
-
-        repo-add $current_repo_dir/i686/${repo}.db.tar.gz $current_repo_dir/i686/$(basename $f)
-        repo-add $current_repo_dir/x86_64/${repo}.db.tar.gz $current_repo_dir/x86_64/$(basename $f)
-      elif [ "${arch}" != "src" ]
-      then
-        repo-add $current_repo_dir/${arch}/${repo}.db.tar.gz $current_repo_dir/${arch}/$(basename $f)
-      fi
     fi
   done
 done

@@ -6,3 +6,6 @@ Defaults env_keep +="PACKAGER"
 
 Cmnd_Alias BUILD = /usr/bin/setarch, /usr/bin/mkarchroot, /usr/bin/arch-nspawn, /usr/bin/makechrootpkg
 buildslave ALL=(root)NOPASSWD: BUILD
+
+Cmnd_Alias BUILDMASTER = /usr/bin/chmod, /usr/bin/chown
+buildmaster ALL=(root)NOPASSWD: BUILDMASTER

@@ -50,6 +50,7 @@ do
         fi
       fi
 
+      rm $f
     fi
   done
 done

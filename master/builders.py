@@ -149,13 +149,13 @@ class AppBuilder(object):
 				name = "clean_chroot",
 				category = "clean",
 				slavenames = [ i.slavename for i in slaves ],
-				factory = factory,
 				properties = { "pkgname": "clean_chroot" },
-				builddir = "builders/%s" % entry.name,
-				slavebuilddir = "builders/%s" % entry.name,
+				factory = factory,
+				builddir = "builders/clean_chroot",
+				slavebuilddir = "builders/clean_chroot",
 				)
 
-		yield builder
+		return builder
 
 	@classmethod
 	def clean_ftp_dir(cls, slaves):
@@ -173,8 +173,8 @@ class AppBuilder(object):
 				slavenames = [ i.slavename for i in slaves ],
 				properties = { "pkgname": "clean_ftp_dir" },
 				factory = factory,
-				builddir = "builders/%s" % entry.name,
-				slavebuilddir = "builders/%s" % entry.name,
+				builddir = "builders/clean_ftp_dir",
+				slavebuilddir = "builders/clean_ftp_dir",
 				)
 
-		yield builder
+		return builder

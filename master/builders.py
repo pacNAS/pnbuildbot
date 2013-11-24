@@ -97,7 +97,10 @@ class AppBuilder(object):
 					masterdest=os.path.join("staging", repo),
 					name = "push")
 
-			step_deploy_in_repo = MasterShellCommand(command= ['scripts/deploy', repo])
+			step_deploy_in_repo = MasterShellCommand(command= ['scripts/deploy', repo],
+				description = "deploy to repository",
+				descriptionDone = "deployed to repository",
+				name = "deploy_in_repo")
 
 			step_cleanup = ShellCommand(
 					command = ["scripts/cleanup", repo, name,
@@ -163,7 +166,10 @@ class AppBuilder(object):
 
 		factory = BuildFactory()
 
-		step_clean_ftp_dir = MasterShellCommand(command= ['scripts/clean_ftp_dir'])
+		step_clean_ftp_dir = MasterShellCommand(command= ['scripts/clean_ftp_dir'],
+			description = "clean ftp dir",
+			descriptionDone = "cleaned ftp dir",
+			name = "clean_ftp_dir")
 
 		factory.addStep(step_clean_ftp_dir)
 

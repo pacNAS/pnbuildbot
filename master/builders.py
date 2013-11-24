@@ -100,7 +100,7 @@ class AppBuilder(object):
 			step_deploy_in_repo = MasterShellCommand(command= ['scripts/deploy', repo])
 
 			step_cleanup = ShellCommand(
-					command = ['rm', '*', '-rf',
+					command = ["scripts/cleanup", repo, name,
 						WithProperties('%(branch)s')
 						],
 					haltOnFailure = True,
@@ -125,3 +125,54 @@ class AppBuilder(object):
 					)
 
 			yield builder
+
+	@classmethod
+	def clean_chroot(cls, slaves):
+		base_dir = "../../../"
+
+		factory = BuildFactory()
+
+		step_clean_chroot = ShellCommand(
+				command = ["scripts/chroot-cleaner",
+					WithProperties('%(branch)s')
+					],
+				workdir=base_dir,
+				haltOnFailure = True,
+				flunkOnFailure = True,
+				description = "cleanup chroots",
+				descriptionDone = "cleaned chroots", name = "cleanup chroots",
+				interruptSignal="TERM")
+
+		factory.addStep(step_clean_chroot)
+
+		builder = BuilderConfig(
+				name = "clean_chroot",
+				category = "clean",
+				slavenames = [ i.slavename for i in slaves ],
+				factory = factory,
+				builddir = "builders/%s" % entry.name,
+				slavebuilddir = "builders/%s" % entry.name,
+				)
+
+		yield builder
+
+	@classmethod
+	def clean_ftp_dir(cls, slaves):
+		base_dir = "../../../"
+
+		factory = BuildFactory()
+
+		step_clean_ftp_dir = MasterShellCommand(command= ['scripts/clean_ftp_dir'])
+
+		factory.addStep(step_clean_ftp_dir)
+
+		builder = BuilderConfig(
+				name = "clean_ftp_dir",
+				category = "clean",
+				slavenames = [ i.slavename for i in slaves ],
+				factory = factory,
+				builddir = "builders/%s" % entry.name,
+				slavebuilddir = "builders/%s" % entry.name,
+				)
+
+		yield builder

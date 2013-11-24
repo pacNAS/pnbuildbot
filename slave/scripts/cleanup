@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# This script takes the following parameters
+repo=$1
+pkgname=$2
+
+# Absolute path to this script. e.g. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f $0)
+# Absolute path this script is in. e.g. /home/user/bin
+SCRIPTPATH=`dirname $SCRIPT`
+
+pkg_base=$SCRIPTPATH/../builders/$repo/$pkgname/build
+
+sudo rm -rf ${pkg_base}/*

@@ -150,6 +150,7 @@ class AppBuilder(object):
 				category = "clean",
 				slavenames = [ i.slavename for i in slaves ],
 				factory = factory,
+				properties = { "pkgname": "clean_chroot" },
 				builddir = "builders/%s" % entry.name,
 				slavebuilddir = "builders/%s" % entry.name,
 				)
@@ -170,6 +171,7 @@ class AppBuilder(object):
 				name = "clean_ftp_dir",
 				category = "clean",
 				slavenames = [ i.slavename for i in slaves ],
+				properties = { "pkgname": "clean_ftp_dir" },
 				factory = factory,
 				builddir = "builders/%s" % entry.name,
 				slavebuilddir = "builders/%s" % entry.name,

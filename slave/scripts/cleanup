@@ -11,4 +11,4 @@ SCRIPTPATH=`dirname $SCRIPT`
 
 pkg_base=$SCRIPTPATH/../builders/$repo/$pkgname/build
 
-sudo rm ${pkg_base}/*
+rm ${pkg_base}/*

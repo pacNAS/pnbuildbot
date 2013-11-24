@@ -106,6 +106,7 @@ class AppBuilder(object):
 					command = ["scripts/cleanup", repo, name,
 						WithProperties('%(branch)s')
 						],
+					workdir=base_dir,
 					haltOnFailure = True,
 					flunkOnFailure = True,
 					description = "cleanup",

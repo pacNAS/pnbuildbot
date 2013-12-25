@@ -27,6 +27,8 @@ pn-core/pacman-mirrorlist
 
 pn-extra/pacnasinstall
 
+pn-community/bubbleupnpserver
 pn-community/python2-ntplib
 pn-community/python2-iptables
 pn-community/genesis
+

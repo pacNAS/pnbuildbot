@@ -5,7 +5,7 @@ repo=$1
 src_base=/srv/buildbot/master/staging
 current_src_dir=$src_base/"$repo"
 
-repo_base=/srv/http/pacnas
+repo_base=/srv/http/pacnas/repo
 current_repo_dir=$repo_base/"$repo"/os
 
 pool_dir=$repo_base/pool/packages
